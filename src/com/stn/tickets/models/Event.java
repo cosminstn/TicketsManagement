@@ -2,6 +2,7 @@ package com.stn.tickets.models;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class Event {
 
@@ -15,9 +16,10 @@ public abstract class Event {
     public Event() {
     }
 
-    public Event(Integer id, String name, Date startDate, Date endDate, Location location) {
+    public Event(Integer id, String name, String description, Date startDate, Date endDate, Location location) {
         this.id = id;
         this.name = name;
+        this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.location = location;
@@ -37,6 +39,14 @@ public abstract class Event {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Date getStartDate() {
@@ -64,4 +74,16 @@ public abstract class Event {
     }
 
     public abstract List<Constants.TICKET_TYPES> getTicketsTypes();
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null)
+            return false;
+
+        if (!Event.class.isAssignableFrom(o.getClass()))
+            return false;
+
+        final Event event = (Event) o;
+        return Objects.equals(event.getId(), this.getId());
+    }
 }

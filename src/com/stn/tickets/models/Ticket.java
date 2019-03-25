@@ -5,13 +5,14 @@ public class Ticket {
     private Integer id;
     private Event event;
     private double price;
-    private String type;
-    private Consumer owner;
+    private Constants.TICKET_TYPES type;
+    private Consumer owner = null;
+    private boolean wasUser = false;
 
     public Ticket() {
     }
 
-    public Ticket(Integer id, Event event, double price, String type, Consumer owner) {
+    public Ticket(Integer id, Event event, double price, Constants.TICKET_TYPES type, Consumer owner) {
         this.id = id;
         this.event = event;
         this.price = price;
@@ -43,11 +44,11 @@ public class Ticket {
         this.price = price;
     }
 
-    public String getType() {
+    public Constants.TICKET_TYPES getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Constants.TICKET_TYPES type) {
         this.type = type;
     }
 
