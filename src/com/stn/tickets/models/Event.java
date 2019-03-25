@@ -63,5 +63,5 @@ public abstract class Event {
         this.location = location;
     }
 
-    public abstract List<String> getTicketsTypes();
+    public abstract List<Constants.TICKET_TYPES> getTicketsTypes();
 }

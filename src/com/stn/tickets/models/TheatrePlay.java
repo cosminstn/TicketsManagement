@@ -7,9 +7,10 @@ public class TheatrePlay extends Event {
 
 
     @Override
-    public List<String> getTicketsTypes() {
+    public List<Constants.TICKET_TYPES> getTicketsTypes() {
         List<String> types = new ArrayList<String>();
-        types.add("vip");
+        types.add("FRONT-ROW");
+        types.add("STANDARD");
         return types;
     }
 }
