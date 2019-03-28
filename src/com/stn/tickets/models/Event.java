@@ -74,16 +74,16 @@ public abstract class Event {
     }
 
     public abstract List<Constants.TICKET_TYPES> getTicketsTypes();
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null)
-            return false;
-
-        if (!Event.class.isAssignableFrom(o.getClass()))
-            return false;
-
-        final Event event = (Event) o;
-        return Objects.equals(event.getId(), this.getId());
-    }
+//
+//    @Override
+//    public boolean equals(Object o) {
+//        if (o == null)
+//            return false;
+//
+//        if (!Event.class.isAssignableFrom(o.getClass()))
+//            return false;
+//
+//        final Event event = (Event) o;
+//        return Objects.equals(event.getId(), this.getId());
+//    }
 }

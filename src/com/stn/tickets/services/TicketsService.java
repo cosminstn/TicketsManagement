@@ -9,8 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class TicketsService {
-    private static int NEXT_TICKET_ID = 1;
-    private static List<Ticket> tickets;
+
+    private int nextTicketId = 1;
+    private List<Ticket> tickets;
 
     private static TicketsService instance = new TicketsService();
 
@@ -83,7 +84,7 @@ public class TicketsService {
     }
 
     private int getNextTicketId() {
-        return NEXT_TICKET_ID++;
+        return nextTicketId++;
     }
 
 }
