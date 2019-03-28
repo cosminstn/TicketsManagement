@@ -2,7 +2,6 @@ package com.stn.tickets.models;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 public abstract class Event {
 

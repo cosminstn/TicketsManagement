@@ -79,12 +79,12 @@ public class EventsService implements IEventService {
     }
 
     @Override
-    public List<Ticket> getAvailableTicketsByType(Class<? extends Event> ev, Constants.TICKET_TYPES type) {
+    public List<Ticket> getAvailableTicketsByType(Event ev, Constants.TICKET_TYPES type) {
         return null;
     }
 
     @Override
-    public List<Ticket> getAvailableTickets(Class<? extends Event> ev) {
+    public List<Ticket> getAvailableTickets(Event ev) {
         return null;
     }
 
@@ -140,5 +140,24 @@ public class EventsService implements IEventService {
         return cityMovies;
     }
 
+    public List<StandupComedyShow> getStandupComedyShowsByCountry(String countryName) throws Exception {
+        List<StandupComedyShow> countryStandups = new ArrayList<>();
+        for (Event ev : getEventsByCountry(countryName))
+            if (ev instanceof StandupComedyShow)
+                countryStandups.add((StandupComedyShow) ev);
+        if (countryStandups.size() == 0)
+            throw new Exception("No standup comedy shows found for this country");
+        return countryStandups;
+    }
+
+    public List<StandupComedyShow> getStandupComedyShowsByCity(String city) throws Exception {
+        List<StandupComedyShow> cityStandups = new ArrayList<>();
+        for (Event ev : getEventsByCity(city))
+            if (ev instanceof StandupComedyShow)
+                cityStandups.add((StandupComedyShow) ev);
+        if (cityStandups.size() == 0)
+            throw new Exception("No standup found for this city");
+        return cityStandups;
+    }
 
 }

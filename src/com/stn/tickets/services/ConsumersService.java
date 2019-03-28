@@ -10,7 +10,6 @@ public class ConsumersService {
 
     private List<Consumer> consumers;
 
-
     private ConsumersService instance = new ConsumersService();
     private TicketsService ticketsService;
 

@@ -11,8 +11,8 @@ public interface IEventService {
 
     public Ticket buyTicket(Consumer consumer, Constants.TICKET_TYPES type, String promoCode);
 
-    public List<Ticket> getAvailableTicketsByType(Class<? extends Event> ev, Constants.TICKET_TYPES type);
+    public List<Ticket> getAvailableTicketsByType(Event ev, Constants.TICKET_TYPES type);
 
-    public List<Ticket> getAvailableTickets(Class<? extends Event> ev);
+    public List<Ticket> getAvailableTickets(Event ev);
 
 }

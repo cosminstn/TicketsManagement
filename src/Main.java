@@ -1,10 +1,11 @@
+import com.stn.tickets.models.Constants;
 import com.stn.tickets.models.Location;
 import com.stn.tickets.models.Movie;
 import com.stn.tickets.services.EventsService;
 import com.stn.tickets.services.LocationsService;
 import com.stn.tickets.utils.Utils;
 
-import java.util.Calendar;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Main {
 
@@ -20,11 +21,15 @@ public class Main {
             Movie newMovie = Utils.createRandomMovie();
             try {
                 eventsService.registerEvent(newMovie);
+                eventsService.createEventTickets(newMovie, Constants.TICKET_TYPES.STANDARD,
+                        Math.abs(ThreadLocalRandom.current().nextInt() % 100) + 1, 6000);
             } catch (Exception ex) {
                 System.out.println("Could not register movie: " + newMovie.getName());
                 ex.printStackTrace();
             }
         }
+
+
 
         // print all movies
         System.out.println("All movies: ");
