@@ -2,13 +2,12 @@ package com.stn.tickets.services;
 
 import com.stn.tickets.models.Location;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LocationsService {
 
-    private List<Location> locations;
+    private TreeSet<Location> locations;
 
     private static LocationsService instance = new LocationsService();
 
@@ -17,7 +16,7 @@ public class LocationsService {
     }
 
     private LocationsService() {
-        locations = new ArrayList<>();
+        locations = new TreeSet<>(new LocationsComparator());
         for (int i = 0; i < 10; i++) {
             Location loc = new Location();
             loc.setId(0);
@@ -29,7 +28,7 @@ public class LocationsService {
     }
 
     public List<Location> getAllLocations() {
-        return locations;
+        return new ArrayList<>(locations);
     }
 
     public List<Location> getLocationsByCity(String cityName) throws Exception {
@@ -52,9 +51,15 @@ public class LocationsService {
         return countryLocations;
     }
 
-    public Location getRandomLocation() {
+    public Location getRandomLocation() throws Exception {
         int randomPosition = ThreadLocalRandom.current().nextInt(0, locations.size());
-        return locations.get(randomPosition);
+        int currentIndex = 0;
+        for (Location loc : locations) {
+            if (currentIndex == randomPosition)
+                return loc;
+            currentIndex++;
+        }
+        throw new Exception("Could not generate random location!");
     }
 
     public Location getLocationById(int id) throws Exception {
@@ -62,5 +67,15 @@ public class LocationsService {
             if (loc.getId() == id)
                 return loc;
         throw new Exception ("No location found for this id");
+    }
+
+    private class LocationsComparator implements Comparator<Location> {
+        @Override
+        public int compare(Location l1, Location l2) {
+            return l1.getCountry().compareTo(l2.getCountry()) == 0 ? (
+                       l1.getCity().compareTo(l2.getCity()) == 0 ?
+                       l1.getName().compareTo(l2.getName()) : l1.getCity().compareTo(l2.getCity())) :
+                   l1.getCountry().compareTo(l2.getCountry()) ;
+        }
     }
 }

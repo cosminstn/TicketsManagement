@@ -12,7 +12,8 @@ public class Main {
     private static EventsService eventsService       =  EventsService.getInstance();
     private static LocationsService locationsService = LocationsService.getInstance();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+
         Location myLocation = locationsService.getRandomLocation();
         System.out.println("I'm here: " + myLocation);
 
@@ -28,8 +29,6 @@ public class Main {
                 ex.printStackTrace();
             }
         }
-
-
 
         // print all movies
         System.out.println("All movies: ");

@@ -5,7 +5,6 @@ import com.stn.tickets.services.EventsService;
 import com.stn.tickets.services.LocationsService;
 
 import java.util.Calendar;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Utils {
@@ -16,23 +15,23 @@ public class Utils {
     private static String UPPERCASE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789";
     private static String LOWERCASE_CHARS = UPPERCASE_CHARS.toLowerCase();
 
-    public static Movie createRandomMovie() {
+    public static Movie createRandomMovie() throws Exception {
         return (Movie) createRandomEvent(Movie.class);
     }
 
-    public static StandupComedyShow createRandomStandupShow() {
+    public static StandupComedyShow createRandomStandupShow() throws Exception {
         return (StandupComedyShow) createRandomEvent(StandupComedyShow.class);
     }
 
-    public static Concert createRandomConcert() {
+    public static Concert createRandomConcert() throws Exception {
         return (Concert) createRandomEvent(Concert.class);
     }
 
-    public static TheatrePlay createRandomTheatrePlay() {
+    public static TheatrePlay createRandomTheatrePlay() throws Exception {
         return (TheatrePlay) createRandomEvent(TheatrePlay.class);
     }
 
-    private static Event createRandomEvent(Class<? extends Event> evClass) {
+    private static Event createRandomEvent(Class<? extends Event> evClass) throws Exception {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new java.util.Date());
         cal.add(Calendar.DATE, Math.abs(ThreadLocalRandom.current().nextInt()) % 200);
@@ -49,6 +48,7 @@ public class Utils {
             event = new TheatrePlay();
         else
             event = new Concert();
+
         event.setLocation(locationsService.getRandomLocation());
         event.setName(generateString(UPPERCASE_CHARS, 20));
         event.setDescription(generateString(LOWERCASE_CHARS, 60));
