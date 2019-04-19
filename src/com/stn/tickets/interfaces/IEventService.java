@@ -1,6 +1,6 @@
 package com.stn.tickets.interfaces;
 
-import com.stn.tickets.models.Constants;
+import com.stn.tickets.utils.Constants;
 import com.stn.tickets.models.Consumer;
 import com.stn.tickets.models.Event;
 import com.stn.tickets.models.Ticket;

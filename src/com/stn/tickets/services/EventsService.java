@@ -2,6 +2,8 @@ package com.stn.tickets.services;
 
 import com.stn.tickets.interfaces.IEventService;
 import com.stn.tickets.models.*;
+import com.stn.tickets.persistence.PersistenceService;
+import com.stn.tickets.utils.Constants;
 
 import java.util.Date;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ public class EventsService implements IEventService {
     private Integer nextEventId = 0;
     private TicketsService ticketsService;
     private LocationsService locationsService;
+    private PersistenceService<Event> persistenceService;
 
     private static EventsService instance = new EventsService();
 
@@ -25,6 +28,7 @@ public class EventsService implements IEventService {
         events              = new ArrayList<>();
         ticketsService      = TicketsService.getInstance();
         locationsService    = LocationsService.getInstance();
+        persistenceService  = new PersistenceService<>(new Movie());
     }
 
     public Movie createMovie(String name, String description, Date startDate, Date endDate, Location location) {
@@ -160,4 +164,14 @@ public class EventsService implements IEventService {
         return cityStandups;
     }
 
+    public boolean persistData() {
+        try {
+            persistenceService.persistList(events);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Could not persist events list");
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

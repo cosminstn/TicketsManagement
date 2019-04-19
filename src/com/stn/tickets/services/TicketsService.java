@@ -1,6 +1,7 @@
 package com.stn.tickets.services;
 
-import com.stn.tickets.models.Constants;
+import com.stn.tickets.persistence.PersistenceService;
+import com.stn.tickets.utils.Constants;
 import com.stn.tickets.models.Event;
 import com.stn.tickets.models.Ticket;
 
@@ -12,11 +13,13 @@ public class TicketsService {
 
     private int nextTicketId = 1;
     private List<Ticket> tickets;
+    private PersistenceService<Ticket> persistenceService;
 
     private static TicketsService instance = new TicketsService();
 
     private TicketsService() {
         tickets = new ArrayList<>();
+        persistenceService = new PersistenceService<>(new Ticket());
     }
 
     public static TicketsService getInstance() {
@@ -87,4 +90,14 @@ public class TicketsService {
         return nextTicketId++;
     }
 
+    public boolean persistData() {
+        try {
+            persistenceService.persistList(tickets);
+            return true;
+        } catch (Exception ex) {
+            System.out.println("Could not persist tickets");
+            ex.printStackTrace();
+            return false;
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package com.stn.tickets.models;
 
+import com.stn.tickets.utils.Constants;
+
 import java.util.ArrayList;
 import java.util.List;
 

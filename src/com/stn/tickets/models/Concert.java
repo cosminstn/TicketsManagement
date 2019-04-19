@@ -1,10 +1,11 @@
 package com.stn.tickets.models;
 
+import com.stn.tickets.utils.Constants;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Concert extends Event {
-
 
     @Override
     public List<Constants.TICKET_TYPES> getTicketsTypes() {

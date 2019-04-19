@@ -4,7 +4,10 @@ import com.stn.tickets.models.*;
 import com.stn.tickets.services.EventsService;
 import com.stn.tickets.services.LocationsService;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Utils {
@@ -65,6 +68,15 @@ public class Utils {
             text[i] = characters.charAt(ThreadLocalRandom.current().nextInt(characters.length()));
         }
         return new String(text);
+    }
+
+    public static List<Consumer> createDemoConsumers(int count) {
+        List<Consumer> fakeConsumers = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            fakeConsumers.add(new Consumer(i, "John", "Doe" + i, new Date(),
+                    "city" + i, "country" + i, "email" + i));
+        }
+        return fakeConsumers;
     }
 
 }

@@ -1,16 +1,22 @@
 package com.stn.tickets.models;
 
-public class Location {
+import com.stn.tickets.persistence.PersistentEntity;
+
+public class Location extends PersistentEntity {
 
     private Integer id;
     private String name;
     private String country;
     private String city;
 
+    private static final String PERSISTENCE_FILE_NAME = "locations.csv";
+
     public Location() {
+        super("locations.csv");
     }
 
     public Location(Integer id, String name, String country, String city) {
+        super(PERSISTENCE_FILE_NAME);
         this.id = id;
         this.name = name;
         this.country = country;
@@ -52,5 +58,19 @@ public class Location {
     @Override
     public String toString() {
         return String.format("Country: %s City: %s Name: %s", getCountry(), getCity(), getName());
+    }
+
+    @Override
+    public String toCsvLine() throws Exception {
+        if (id == null)
+            throw new Exception("The id of a persistent entity cannot be null");
+
+        String line = "";
+        line += id + ",";
+        line += (name) + ",";
+        line += (country != null ? country : "") + ",";
+        line += (city != null ? city : "");
+
+        return line;
     }
 }

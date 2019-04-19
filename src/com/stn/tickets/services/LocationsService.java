@@ -1,6 +1,7 @@
 package com.stn.tickets.services;
 
 import com.stn.tickets.models.Location;
+import com.stn.tickets.persistence.PersistenceService;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -9,6 +10,7 @@ public class LocationsService {
 
     private TreeSet<Location> locations;
 
+    private PersistenceService<Location> persistenceService;
     private static LocationsService instance = new LocationsService();
 
     public static LocationsService getInstance() {
@@ -16,7 +18,9 @@ public class LocationsService {
     }
 
     private LocationsService() {
+
         locations = new TreeSet<>(new LocationsComparator());
+        persistenceService = new PersistenceService<>(new Location());
         for (int i = 0; i < 10; i++) {
             Location loc = new Location();
             loc.setId(0);
@@ -76,6 +80,19 @@ public class LocationsService {
                        l1.getCity().compareTo(l2.getCity()) == 0 ?
                        l1.getName().compareTo(l2.getName()) : l1.getCity().compareTo(l2.getCity())) :
                    l1.getCountry().compareTo(l2.getCountry()) ;
+        }
+    }
+
+    public boolean persistData() {
+        try {
+            List<Location> locsList = new ArrayList<>(locations);
+
+            persistenceService.persistList(locsList);
+            return false;
+        } catch (Exception ex) {
+            System.out.println("Could not persist locations");
+            ex.printStackTrace();
+            return false;
         }
     }
 }
