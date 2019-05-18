@@ -1,4 +1,6 @@
-package com.stn.tickets.dao.general;
+package com.stn.tickets.db.dao;
+
+import com.stn.tickets.db.dao.general.Entity;
 
 public interface IEntityDAO<T extends Entity> {
 

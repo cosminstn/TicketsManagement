@@ -1,6 +1,6 @@
-package com.stn.tickets.dao.general;
+package com.stn.tickets.db.dao.general;
 
-public class Entity {
+public abstract class Entity {
 
     protected Integer id;
 
