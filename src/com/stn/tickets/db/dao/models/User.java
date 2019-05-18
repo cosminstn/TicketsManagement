@@ -1,6 +1,6 @@
-package com.stn.tickets.dao.entities;
+package com.stn.tickets.db.dao.models;
 
-import com.stn.tickets.dao.general.Entity;
+import com.stn.tickets.db.dao.models.general.Entity;
 
 public class User extends Entity {
 

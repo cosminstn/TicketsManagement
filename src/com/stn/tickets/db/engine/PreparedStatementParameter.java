@@ -1,6 +1,7 @@
-package com.stn.tickets.dao.engine;
+package com.stn.tickets.db.engine;
 
 import java.sql.PreparedStatement;
+import java.sql.Types;
 
 public class PreparedStatementParameter<T> {
 
@@ -41,8 +42,14 @@ public class PreparedStatementParameter<T> {
         this.sqlType = sqlType;
     }
 
+    @Deprecated
     public static void applyParameter(PreparedStatement prepStmt, PreparedStatementParameter param) throws Exception {
-        prepStmt.setObject(param.getIndex(), param.getValue(), param.getSqlType());
+        if (param.getSqlType() == Types.INTEGER)
+            prepStmt.setInt(param.getIndex(), (Integer) param.getValue());
+        else if (param.getSqlType() == Types.NVARCHAR || param.getSqlType() == Types.VARCHAR)
+            prepStmt.setString(param.getIndex(), (String) param.getValue());
+        else
+            prepStmt.setObject(param.getIndex(), param.getValue());
     }
 
 }

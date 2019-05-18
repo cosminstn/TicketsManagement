@@ -1,6 +1,7 @@
-package com.stn.tickets.dao.engine;
+package com.stn.tickets.db.engine;
 
 import com.stn.tickets.utils.ConfUtils;
+import com.stn.tickets.utils.Constants;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class DbEngine {
         dbPass  = ConfUtils.getInstance().getDbPass();
     }
 
-    public DbEngine getInstance() {
+    public static DbEngine getInstance() {
         if (instance == null)
             instance = new DbEngine();
         return instance;
@@ -42,7 +43,7 @@ public class DbEngine {
         Statement stmt = null;
         ResultSet rs = null;
         try {
-            Class.forName("com.ibm.db2.jcc.DB2Driver");
+            Class.forName(Constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
 
             stmt = conn.createStatement();
@@ -79,14 +80,15 @@ public class DbEngine {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            Class.forName("com.ibm.db2.jcc.DB2Driver");
+            Class.forName(Constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
 
-            stmt = conn.prepareStatement(sql);
+            stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
             for (PreparedStatementParameter param : params)
                 stmt.setObject(param.getIndex(), param.getValue(), param.getSqlType());
 
-            stmt.execute(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.execute();
             rs = stmt.getGeneratedKeys();
             if (!rs.next())
                 throw new Exception("empty reader!");
@@ -111,7 +113,7 @@ public class DbEngine {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
-            Class.forName("com.ibm.db2.jcc.DB2Driver");
+            Class.forName(Constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
 
             stmt = conn.prepareStatement(sql);
@@ -135,7 +137,7 @@ public class DbEngine {
         Connection conn = null;
         Statement stmt = null;
         try {
-            Class.forName("com.ibm.db2.jcc.DB2Driver");
+            Class.forName(Constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
 
             stmt = conn.createStatement();
@@ -158,7 +160,7 @@ public class DbEngine {
         PreparedStatement prepStmt = null;
         ResultSet rs 			   = null;
         try {
-            Class.forName("com.ibm.db2.jcc.DB2Driver");
+            Class.forName(Constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
 
             prepStmt = conn.prepareStatement(sql);
@@ -201,7 +203,7 @@ public class DbEngine {
         Statement stmt = null;
         ResultSet rs 			   = null;
         try {
-            Class.forName("com.ibm.db2.jcc.DB2Driver");
+            Class.forName(Constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
 
             stmt = conn.createStatement();
@@ -241,11 +243,15 @@ public class DbEngine {
         return query(sql).get(0)[0];
     }
 
+    public Object[] executeFetchFirstLine(String sql, List<PreparedStatementParameter> params) throws Exception {
+        return query(sql, params).get(0);
+    }
+
     public boolean execute(String sql, List<PreparedStatementParameter> params) throws Exception {
         Connection conn = null;
         PreparedStatement prepStmt = null;
         try {
-            Class.forName("com.ibm.db2.jcc.DB2Driver");
+            Class.forName(Constants.JDBC_DRIVER);
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
 
             prepStmt = conn.prepareStatement(sql);

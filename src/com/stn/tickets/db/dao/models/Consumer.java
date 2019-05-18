@@ -1,46 +1,26 @@
-package com.stn.tickets.models;
+package com.stn.tickets.db.dao.models;
 
-import com.stn.tickets.persistence.PersistentEntity;
-import com.stn.tickets.utils.Constants;
+import com.stn.tickets.db.dao.models.general.Entity;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+public class Consumer extends Entity {
 
-import static com.stn.tickets.utils.Constants.CSV_DATE_TIME_FORMAT;
-
-public class Consumer extends PersistentEntity {
-
-    private Integer id;
     private String firstName;
     private String lastName;
-    private Date birthDate;
+    private java.sql.Date birthDate;
     private String city;
     private String country;
     private String email;
+    
+    public Consumer() {}
 
-    private static final String PERSISTENCE_FILE_NAME = "consumers.csv";
-
-    public Consumer() {
-        super(PERSISTENCE_FILE_NAME);
-    }
-
-    public Consumer(Integer id, String firstName, String lastName, Date birthDate, String city, String country, String email) {
-        super(PERSISTENCE_FILE_NAME);
-        this.id = id;
+    public Consumer(Integer id, String firstName, String lastName, java.sql.Date birthDate, String city, String country, String email) {
+        super(id);
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.city = city;
         this.country = country;
         this.email = email;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getFirstName() {
@@ -59,11 +39,11 @@ public class Consumer extends PersistentEntity {
         this.lastName = lastName;
     }
 
-    public Date getBirthDate() {
+    public java.sql.Date getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(java.sql.Date birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -89,33 +69,5 @@ public class Consumer extends PersistentEntity {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    @Override
-    public String toCsvLine() throws Exception {
-        if (id == null)
-            throw new Exception("ID cannot be null for persistent entities!");
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat(CSV_DATE_TIME_FORMAT);
-
-        return String.format("%d,%s,%s,%s,%s,%s,%s", id, filterString(firstName), filterString(lastName),
-                dateFormat.format(birthDate), filterString(city), filterString(country), filterString(email));
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Consumer loadFromCsvLine(String line) throws Exception {
-        String[] fields = line.split(",");
-        Consumer cons = new Consumer();
-        cons.setId(Integer.parseInt(fields[0]));
-        cons.setFirstName(fields[1]);
-        cons.setLastName(fields[2]);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat(CSV_DATE_TIME_FORMAT);
-        cons.setBirthDate(dateFormat.parse(fields[3]));
-        cons.setCity(fields[4]);
-        cons.setCountry(fields[5]);
-        cons.setEmail(fields[6]);
-        return cons;
     }
 }

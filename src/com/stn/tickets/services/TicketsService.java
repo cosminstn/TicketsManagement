@@ -2,8 +2,8 @@ package com.stn.tickets.services;
 
 import com.stn.tickets.persistence.PersistenceService;
 import com.stn.tickets.utils.Constants;
-import com.stn.tickets.models.Event;
-import com.stn.tickets.models.Ticket;
+import com.stn.tickets.db.dao.models.Event;
+import com.stn.tickets.db.dao.models.Ticket;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +20,7 @@ public class TicketsService {
     private TicketsService() {
         tickets = new ArrayList<>();
         persistenceService = new PersistenceService<>(new Ticket());
+        tickets = persistenceService.loadPersistentList();
     }
 
     public static TicketsService getInstance() {

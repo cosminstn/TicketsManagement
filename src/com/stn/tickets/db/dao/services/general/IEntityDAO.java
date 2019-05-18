@@ -1,6 +1,6 @@
-package com.stn.tickets.db.dao;
+package com.stn.tickets.db.dao.services.general;
 
-import com.stn.tickets.db.dao.general.Entity;
+import com.stn.tickets.db.dao.models.general.Entity;
 
 public interface IEntityDAO<T extends Entity> {
 
@@ -22,11 +22,11 @@ public interface IEntityDAO<T extends Entity> {
 
     /**
      * Update a persistent entity.
-     * @param udpatedEntity
+     * @param updatedEntity
      * @return Returns the success of the operation
      * @throws Exception Any exception that occurs during update
      */
-    boolean updateEntity(T udpatedEntity) throws Exception;
+    boolean updateEntity(T updatedEntity) throws Exception;
 
     /**
      * Deletes a persistent entity.

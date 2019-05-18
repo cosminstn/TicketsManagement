@@ -1,6 +1,5 @@
 package com.stn.tickets.persistence;
 
-import com.stn.tickets.models.Consumer;
 import com.stn.tickets.utils.Constants;
 
 import java.io.BufferedReader;
@@ -20,7 +19,7 @@ public class PersistenceService<T extends PersistentEntity> {
         this.ghostEntity = ghostEntity;
     }
 
-    private static List<AuditAction> actions = new ArrayList<>();
+    private static List<AuditAction> actions = loadActions();
 
     public void persistList(List<T> persistentList) throws Exception {
         if (persistentList == null || persistentList.size() == 0)
@@ -46,18 +45,37 @@ public class PersistenceService<T extends PersistentEntity> {
             }
 
         }
+        auditActions();
     }
 
     public List<T> loadPersistentList() {
-        //TODO
-        return null;
+        try {
+            File csvFile = new File(Constants.PERSISTENCE_FILES_FOLDER + File.separator +
+                    ghostEntity.getPersistenceFileName());
+
+            try (BufferedReader in = new BufferedReader(new FileReader(csvFile))) {
+                List<T> list = new ArrayList<>();
+                String line;
+                while ((line = in.readLine()) != null) {
+                    try {
+                        list.add(ghostEntity.loadFromCsvLine(line));
+                    } catch (Exception ex) {
+                        System.out.println("could not process line");
+                        ex.printStackTrace();
+                    }
+                }
+                return list;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
-    private static void auditActions(String actionName, Date timestamp) {
-        try {
-            if (actionName == null || timestamp == null)
-                return;
 
+
+    private static void auditActions() {
+        try {
             SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.CSV_DATE_TIME_FORMAT);
 
             File csvFolder = new File(Constants.PERSISTENCE_FILES_FOLDER);
@@ -72,11 +90,12 @@ public class PersistenceService<T extends PersistentEntity> {
             }
 
         } catch (Exception ex) {
-            System.out.println("Could not audit action: " + actionName);
+            System.out.println("Could not audit actions: ");
+            ex.printStackTrace();
         }
     }
 
-    public static void loadActions() {
+    public static List<AuditAction> loadActions() {
         try {
             // Create a ghost entity
 
@@ -84,14 +103,14 @@ public class PersistenceService<T extends PersistentEntity> {
                     AuditAction.PERSISTENCE_FILE_NAME);
 
             try (BufferedReader in = new BufferedReader(new FileReader(file))) {
+                List<AuditAction> foundAudit = new ArrayList<>();
                 String line;
                 int lineCount = 0;
-                actions = new ArrayList<>();
                 while ((line = in.readLine()) != null) {
                     try {
                         String[] contents = line.split(",");
                         SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.CSV_DATE_TIME_FORMAT);
-                        actions.add(new AuditAction(contents[0], dateFormat.parse(contents[1])));
+                        foundAudit.add(new AuditAction(contents[0], dateFormat.parse(contents[1])));
                     } catch (Exception ex) {
                         System.out.println(String.format("Could not process line %d " +
                                 "from file %s", lineCount, AuditAction.PERSISTENCE_FILE_NAME));
@@ -100,10 +119,12 @@ public class PersistenceService<T extends PersistentEntity> {
                         lineCount ++;
                     }
                 }
+                return foundAudit;
             }
         } catch (Exception ex) {
             System.out.println("Could not load " + AuditAction.PERSISTENCE_FILE_NAME);
             ex.printStackTrace();
+            return new ArrayList<>();
         }
     }
 }

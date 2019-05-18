@@ -1,7 +1,7 @@
 package com.stn.tickets.services;
 
-import com.stn.tickets.models.Consumer;
-import com.stn.tickets.models.Ticket;
+import com.stn.tickets.db.dao.models.Consumer;
+import com.stn.tickets.db.dao.models.Ticket;
 import com.stn.tickets.persistence.PersistenceService;
 
 import java.util.ArrayList;
@@ -20,6 +20,7 @@ public class ConsumersService {
         consumers = new ArrayList<Consumer>();
         ticketsService = TicketsService.getInstance();
         persistenceService = new PersistenceService<>(new Consumer());
+        consumers = persistenceService.loadPersistentList();
     }
 
     public static ConsumersService getInstance() {
@@ -42,6 +43,13 @@ public class ConsumersService {
 
     private List<Ticket> getConsumerTickets(Consumer consumer) {
 
+        return null;
+    }
+
+    public Consumer getConsumerById(int id) {
+        for (Consumer c : consumers)
+            if (c.getId() == id)
+                return c;
         return null;
     }
 

@@ -10,7 +10,7 @@ public class AuditAction extends PersistentEntity {
     private String name;
     private Date timestamp;
 
-    public static final String PERSISTENCE_FILE_NAME = "actions.csv";
+    public static final String PERSISTENCE_FILE_NAME = "audit.csv";
 
     public AuditAction() {
         super(PERSISTENCE_FILE_NAME);
@@ -42,6 +42,11 @@ public class AuditAction extends PersistentEntity {
     public String toCsvLine() throws Exception {
         SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.CSV_DATE_TIME_FORMAT);
 
-        return filterString(name) + "," + timestamp;
+        return filterString(name) + "," + dateFormat.format(timestamp);
+    }
+
+    @Override
+    public <T extends PersistentEntity> T loadFromCsvLine(String line) throws Exception {
+        return null;
     }
 }

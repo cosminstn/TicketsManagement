@@ -29,4 +29,5 @@ public abstract class PersistentEntity {
 
     public abstract String toCsvLine() throws Exception;
 
+    public abstract <T extends PersistentEntity> T loadFromCsvLine(String line) throws Exception;
 }

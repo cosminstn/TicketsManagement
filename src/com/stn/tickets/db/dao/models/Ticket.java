@@ -1,21 +1,28 @@
-package com.stn.tickets.models;
+package com.stn.tickets.db.dao.models;
 
-import com.stn.tickets.db.dao.models.Event;
+import com.stn.tickets.db.dao.models.general.Entity;
 import com.stn.tickets.enums.TicketTypes;
 
-public class Ticket {
+public class Ticket extends Entity {
 
-    private Integer id;
     private Event event;
     private double price;
     private TicketTypes type;
     private Consumer owner = null;
-    private boolean wasUsed = false;
 
-    private static final String PERSISTENCE_FILE_NAME = "tickets.csv";
+    public Ticket() {
+
+    }
 
     public Ticket(Integer id, Event event, double price, TicketTypes type, Consumer owner) {
-        this.id = id;
+        super(id);
+        this.event = event;
+        this.price = price;
+        this.type = type;
+        this.owner = owner;
+    }
+
+    public Ticket(Event event, double price, TicketTypes type, Consumer owner) {
         this.event = event;
         this.price = price;
         this.type = type;
