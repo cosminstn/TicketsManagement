@@ -1,6 +1,7 @@
 package com.stn.tickets.models;
 
 import com.stn.tickets.persistence.PersistentEntity;
+import com.stn.tickets.utils.Constants;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -99,5 +100,22 @@ public class Consumer extends PersistentEntity {
 
         return String.format("%d,%s,%s,%s,%s,%s,%s", id, filterString(firstName), filterString(lastName),
                 dateFormat.format(birthDate), filterString(city), filterString(country), filterString(email));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Consumer loadFromCsvLine(String line) throws Exception {
+        String[] fields = line.split(",");
+        Consumer cons = new Consumer();
+        cons.setId(Integer.parseInt(fields[0]));
+        cons.setFirstName(fields[1]);
+        cons.setLastName(fields[2]);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat(CSV_DATE_TIME_FORMAT);
+        cons.setBirthDate(dateFormat.parse(fields[3]));
+        cons.setCity(fields[4]);
+        cons.setCountry(fields[5]);
+        cons.setEmail(fields[6]);
+        return cons;
     }
 }
