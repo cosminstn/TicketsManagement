@@ -22,6 +22,11 @@ public enum ArtistTypes {
         return name;
     }
 
+    @Override
+    public String toString() {
+        return this.getName();
+    }
+
     public static ArtistTypes getArtistTypeById(int id) {
         for (ArtistTypes type : ArtistTypes.values())
             if (type.getId() == id)

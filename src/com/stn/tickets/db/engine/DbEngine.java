@@ -109,6 +109,42 @@ public class DbEngine {
         }
     }
 
+    /**
+     * Executes a batch of queries and returns the number of rows modified for each batch.
+     * @param sql The query
+     * @param paramsBatch A collection of params for each batch
+     * @return An array representing the number of rows modified for each batch
+     * @throws Exception Any exception during the batch execution.
+     */
+    public int[] updateBatch(String sql, List<List<PreparedStatementParameter>> paramsBatch) throws Exception {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            Class.forName(Constants.JDBC_DRIVER);
+            conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
+
+            stmt = conn.prepareStatement(sql);
+
+            for (List<PreparedStatementParameter> params : paramsBatch) {
+                for (PreparedStatementParameter param : params) {
+                    stmt.setObject(param.getIndex(), param.getValue(), param.getSqlType());
+                }
+                stmt.addBatch();
+            }
+
+            return stmt.executeBatch();
+        } finally {
+            try {
+                if (stmt != null)
+                    stmt.close();
+            } catch (Exception ignored) {}
+            try {
+                if (conn != null)
+                    conn.close();
+            } catch (Exception ignored) {}
+        }
+    }
+
     public int update(String sql, List<PreparedStatementParameter> params) throws Exception {
         Connection conn = null;
         PreparedStatement stmt = null;

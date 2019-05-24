@@ -51,7 +51,16 @@ public class ArtistDAO extends EntityDAO<Artist> {
 
     @Override
     public Artist castFromObjectArray(Object[] arr) throws Exception {
-        return null;
+        int colIndex = 0;
+
+        Artist artist = new Artist();
+        artist.setId((int) arr[colIndex++]);
+        artist.setName((String) arr[colIndex++]);
+        artist.setProfilePicUrl((String) arr[colIndex++]);
+        artist.setBirthDate((java.sql.Date) arr[colIndex++]);
+        artist.setType(ArtistTypes.getArtistTypeById((int) arr[colIndex]));
+
+        return artist;
     }
 
     @Override
@@ -67,10 +76,5 @@ public class ArtistDAO extends EntityDAO<Artist> {
         params.add(new PreparedStatementParameter<Integer>(colIndex, entity.getType().getId(), Types.INTEGER));
 
         return params;
-    }
-
-    @Override
-    public boolean updateEntity(Artist updatedEntity) throws Exception {
-        return false;
     }
 }

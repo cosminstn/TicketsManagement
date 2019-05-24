@@ -1,16 +1,5 @@
 package com.stn.tickets.utils;
 
-import com.stn.tickets.db.dao.models.Location;
-import com.stn.tickets.models.*;
-import com.stn.tickets.services.EventsService;
-import com.stn.tickets.services.LocationsService;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-
 public class Utils {
 
 //    private static EventsService eventsService = EventsService.getInstance();

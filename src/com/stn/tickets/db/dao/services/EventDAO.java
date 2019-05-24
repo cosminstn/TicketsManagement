@@ -35,10 +35,13 @@ public class EventDAO extends EntityDAO<Event> {
         int colIndex = 0;
 
         Event event = new Event();
+        event.setId((Integer) arr[colIndex++]);
         event.setName((String) arr[colIndex++]);
         event.setDescription((String) arr[colIndex++]);
-        event.setStartDate((java.sql.Date) arr[colIndex++]);
-        event.setEndDate((java.sql.Date) arr[colIndex++]);
+        java.sql.Timestamp startTimestamp = (java.sql.Timestamp) arr[colIndex++];
+        event.setStartDate(java.sql.Date.valueOf(startTimestamp.toLocalDateTime().toLocalDate()));
+        java.sql.Timestamp endTimestamp = (java.sql.Timestamp) arr[colIndex++];
+        event.setEndDate(java.sql.Date.valueOf(endTimestamp.toLocalDateTime().toLocalDate()));
 
         int locId = (Integer) arr[colIndex];
         Location loc = LocationDAO.getInstance().getEntity(locId);

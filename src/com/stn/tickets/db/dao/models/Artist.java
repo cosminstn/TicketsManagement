@@ -15,7 +15,7 @@ public class Artist extends Entity {
 
     public Artist() {}
 
-    public Artist(Integer id, String name, String profilePicUrl, Date birthDate, ArtistTypes type) {
+    public Artist(Integer id, String name, String profilePicUrl, java.sql.Date birthDate, ArtistTypes type) {
         super(id);
         this.name = name;
         this.profilePicUrl = profilePicUrl;
@@ -23,7 +23,7 @@ public class Artist extends Entity {
         this.type = type;
     }
 
-    public Artist(String name, String profilePicUrl, Date birthDate, ArtistTypes type) {
+    public Artist(String name, String profilePicUrl, java.sql.Date birthDate, ArtistTypes type) {
         this.name = name;
         this.profilePicUrl = profilePicUrl;
         this.birthDate = birthDate;
@@ -46,11 +46,11 @@ public class Artist extends Entity {
         this.profilePicUrl = profilePicUrl;
     }
 
-    public Date getBirthDate() {
+    public java.sql.Date getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(java.sql.Date birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -60,5 +60,10 @@ public class Artist extends Entity {
 
     public void setType(ArtistTypes type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

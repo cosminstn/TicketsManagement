@@ -62,6 +62,21 @@ public abstract class EntityDAO<T extends Entity> implements IEntityDAO<T> {
                 + getParamsPlaceHolder(cols.size());
     }
 
+    protected String getUpdateSql() {
+        List<String> cols = getColumnsNames(false);
+        String sql = "update " + tableName + " set ";
+        int index = 0;
+        for (String col : cols) {
+            sql +=  col + " = ? ";
+            if (index < cols.size() - 1)
+                sql += " and ";
+        }
+        //condition
+        sql += " where " + primaryKeyName + " = ? ";
+        return sql;
+    }
+
+
     /**
      * Arranges the columns like this (COL1, COL2, COL3)
      * @param includePK Tells the function to include the primary key or not into the sequence
@@ -103,6 +118,43 @@ public abstract class EntityDAO<T extends Entity> implements IEntityDAO<T> {
                 .executeFetchFirstLine(getSelectEntityByIdSql(), params);
     }
 
+    /**
+     * Persists an entity batch
+     * @param entityBatch The list of entities
+     * @return Returns the number of entities registered into the database
+     * @throws Exception sql or null exceptions
+     */
+    public int createEntityBatch(List<T> entityBatch) throws Exception {
+        String sql = getInsertSql();
+        List<List<PreparedStatementParameter>> paramsBatch = new ArrayList<>();
+
+        for (T entity : entityBatch) {
+            paramsBatch.add(castToParamsList(entity, false));
+        }
+
+        int[] inserts = DbEngine.getInstance().updateBatch(sql, paramsBatch);
+        int count = 0;
+        for (int i : inserts)
+            count += (i == 1 ? 1 : 0);
+        return count;
+    }
+
+    public List<T> getAllEntities() throws Exception {
+        String sql = "select * from " + tableName;
+        List<Object[]> unparsedList = DbEngine.getInstance().query(sql);
+
+        List<T> finalResult = new ArrayList<>();
+        for (Object[] obj : unparsedList) {
+            finalResult.add(castFromObjectArray(obj));
+        }
+        return finalResult;
+    }
+
+    public List<Object[]> getAllEntitiesUnparsed() throws Exception {
+        String sql = "select * from " + tableName;
+        return DbEngine.getInstance().query(sql);
+    }
+
     @Override
     public boolean isEntityPersistent(int id) throws Exception {
         String sql = "select count(*) from " + tableName + " where " + primaryKeyName + " = ?";
@@ -126,6 +178,15 @@ public abstract class EntityDAO<T extends Entity> implements IEntityDAO<T> {
         Object[] unparsedObject = getUnparsedEntityById(id);
 
         return castFromObjectArray(unparsedObject);
+    }
+
+    public boolean updateEntity(T entity) throws Exception {
+        if (!isEntityPersistent(entity.getId()))
+            throw new Exception("Entity is not persistent!");
+        List<PreparedStatementParameter> params = castToParamsList(entity, false);
+
+        params.add(new PreparedStatementParameter<Integer>(params.size() + 1, entity.getId(), Types.INTEGER));
+        return (Integer) DbEngine.getInstance().update(getUpdateSql(), params) == 1;
     }
 
     @Override

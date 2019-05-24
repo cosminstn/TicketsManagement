@@ -54,6 +54,22 @@ public class TicketDAO extends EntityDAO<Ticket> {
         return ticket;
     }
 
+    public int createEventTickets(Event ev, double price, TicketTypes type, int count) throws Exception {
+        if (ev == null)
+            throw new Exception("Null event");
+        if (count <= 0)
+            throw new Exception("count has to be > 1");
+        if (ev.getId() == null)
+            throw new Exception("Event is missing id!");
+        if (!EventDAO.getInstance().isEntityPersistent(ev.getId()))
+            throw new Exception("Not persistent event!");
+        List<Ticket> ticketsBatch = new ArrayList<>();
+        for (int i = 0; i < count; i++)
+            ticketsBatch.add(new Ticket(ev, price, type, null));
+
+        return createEntityBatch(ticketsBatch);
+    }
+
     @Override
     public List<PreparedStatementParameter> castToParamsList(Ticket entity, boolean includePK) {
         List<PreparedStatementParameter> params = new ArrayList<>();

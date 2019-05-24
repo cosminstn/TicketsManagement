@@ -2,6 +2,7 @@ package com.stn.tickets.db.dao.services;
 
 import com.stn.tickets.db.dao.models.User;
 import com.stn.tickets.db.dao.services.general.EntityDAO;
+import com.stn.tickets.db.engine.DbEngine;
 import com.stn.tickets.db.engine.PreparedStatementParameter;
 
 import java.sql.Types;
@@ -57,5 +58,16 @@ public class UserDAO extends EntityDAO<User> {
         params.add(new PreparedStatementParameter<>(colIndex, entity.getPassword(), Types.NVARCHAR));
 
         return params;
+    }
+
+    public boolean authUser(String username, String password) throws Exception {
+        String sql = "select count(*) from " + tableName + " where " + getColumnsNamesWithoutPK().get(0) + " = ? and " +
+                getColumnsNamesWithoutPK().get(1) + " = ?";
+        List<PreparedStatementParameter> params = new ArrayList<>();
+
+        params.add(new PreparedStatementParameter<String>(1, username, Types.NVARCHAR));
+        params.add(new PreparedStatementParameter<String>(2, password, Types.NVARCHAR));
+
+        return (Long) DbEngine.getInstance().executeScalar(sql, params) == 1;
     }
 }
